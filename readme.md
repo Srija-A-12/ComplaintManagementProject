@@ -1,153 +1,229 @@
-# Complaint Management Project - Blueprint & Features
+# 📌 Complaint Management System
 
-## 📅 Date: 2025-09-08
-
-## 📂 Blueprint of the Project
-
-This project is designed to manage complaints raised by students within an educational institution. It provides a backend service to store and retrieve complaints, allowing students to raise issues and teachers or administrators to track and update their statuses.
-
-### ✅ Project Structure
-
-* **Backend:** Built with Spring Boot, connected to MySQL database.
-* **Frontend:** To be built later (HTML/CSS/JavaScript or frameworks).
+A **role-based Complaint Management System** built using **Spring Boot, Spring Security, MySQL, Tailwind CSS, and JavaScript**.
+It allows **students** to submit complaints and **teachers (HOD/MAM)** to manage and update their status.
 
 ---
 
-## 📘 Features to Implement
-
-### 📚 Student Dashboard (Backend)
-
-1. **Raise Complaint**
-
-   * Endpoint: `POST /Student/Complaint`
-   * Features:
-
-     * Submit a new complaint with title, description, and category.
-     * Automatically mark the complaint as "Raised".
-     * Keep student identity anonymous.
-
-2. **View Complaints**
-
-   * Endpoint: `GET /Student/SeeComplaint`
-   * Features:
-
-     * Retrieve a list of all complaints.
-     * Display status updates (e.g., Raised, In Progress, Resolved).
-     * Ensure that student names are not exposed.
+Perfect 👌 let’s add some **emojis** to make your GitHub README more engaging while still professional.
+Here’s your **Backend + Database only role** section with emojis included:
 
 ---
 
-### 👩‍🏫 Teacher/Admin Dashboard (Backend)
+## 👩‍💻 My Role & Contributions
 
-1. **View Complaints**
+I was responsible for the **Backend and Database Development** of this project.
 
-   * Endpoint: `GET /Teacher/SeeComplaint`
-   * Features:
+* ⚙️ **Backend Development (Spring Boot + Spring Security + JPA)**
 
-     * Retrieve all complaints submitted by students.
-     * View complaint details including title, description, category, and status.
+  * 🛠️ Implemented REST APIs for **student and teacher complaint management**.
+  * 🏗️ Designed and developed the **Entity → Repository → Service → Controller** architecture.
+  * 🔑 Built **user registration and login system** with email restrictions (`srmist.edu.in`) and **BCrypt password encryption**.
+  * 🔒 Configured **Spring Security** for role-based access control (Student / Teacher).
+  * 🚦 Added **custom authentication success handler** for redirecting users based on roles.
 
-2. **Update Complaint Status**
+* 🗄️ **Database Design & Integration (MySQL)**
 
-   * Endpoint: `PUT /Teacher/UpdateComplaintStatus`
-   * Features:
+  * 📝 Designed relational schema for authentication, complaints, and complaint updates.
+  * 🔄 Integrated database with **Spring Data JPA Repositories**.
+  * 📌 Implemented queries for saving, updating, and fetching complaints.
+  * ✅ Ensured **data consistency and referential integrity** across complaint and update tables.
 
-     * Update the status of a complaint (e.g., from Raised to In Progress or Resolved).
-     * Ensure that updates are recorded in the database.
+* 🔗 **System Integration**
 
-
-
-## 📅 Date: 2025-09-08
-
-## ✅ Work Summary
-
-Today, I worked on the backend of the Complaint Management Project. I learned how to create models, repositories, services, and controllers using Spring Boot and connected them to a MySQL database. I implemented endpoints to raise and view complaints and tested the functionality using Postman.
-
-## 📂 What I Implemented
-
-### 1. Project Setup
-
-* Created a Spring Boot project named `ComplaintManagementProject`.
-* Structured packages into `Model`, `Repository`, `Service`, and `Controller`.
-* Configured database connection using `application.properties`.
-
-### 2. Complaint Model
-
-* Defined fields like `id`, `title`, `description`, `category`, and `status`.
-* Used annotations like `@Entity`, `@Id`, and `@GeneratedValue`.
-* Added constructors to set default and parameter values.
-
-### 3. Repository Layer
-
-* Created `ComplaintRepository` by extending `JpaRepository<Complaint, Integer>`.
-* Learned that `Complaint` is the entity and `Integer` is the type for the primary key.
-
-### 4. Service Layer
-
-* Created `ComplaintService` to manage complaint operations.
-* Implemented methods to add complaints and retrieve all complaints.
-* Used `@Autowired` to inject `ComplaintRepository`.
-
-### 5. Controller Layer
-
-* Developed endpoints:
-
-  * `POST /Student/Complaint` to submit complaints.
-  * `GET /Student/SeeComplaint` to view all complaints.
-* Learned how to map requests and use request parameters.
-
-## ❓ Questions I Faced and Solved
-
-1. **Why is `Complaint` used in the repository and not `id`?**
-
-   * Because `JpaRepository` needs the entity and the primary key type, not just the key.
-
-2. **Why use constructors instead of methods?**
-
-   * Constructors are used to create objects with initial values when a new instance is created.
-
-3. **Why create a `Complaint` object in the service?**
-
-   * We need an object to represent the complaint before saving it to the database.
-
-4. **Why use `@Autowired` in the service?**
-
-   * It automatically connects the repository to the service without extra coding.
-
-5. **Why return `Complaint` from controller methods?**
-
-   * Returning the object confirms that the complaint is successfully saved.
-
-6. **Why use `@PostMapping` and `@GetMapping`?**
-
-   * POST is for submitting new data, and GET is for retrieving existing data.
-
-## 🚀 Troubleshooting
-
-* Faced a `404` error because the URL had a newline character (`%0A`). Fixed it by checking the request URL carefully.
-
-
-## 🧠 Lessons Learned
-
-* Dependency injection simplifies the connection between components.
-* Constructors are essential for initializing objects.
-* Understanding how REST APIs communicate is key for building backend systems.
-* Debugging common errors improves coding skills and attention to detail.
+  * 🌐 Connected backend with database to ensure seamless data flow.
+  * 🧪 Validated backend logic by testing endpoints with Postman.
+  * 📊 Ensured that all data (user accounts, complaints, updates) is correctly stored and retrieved.
 
 ---
 
-## ✅ Features Already Implemented
+## 🚀 Features
 
-* ✅ Backend structure with models, repositories, services, and controllers.
-* ✅ MySQL database connection with `Complaint` entity.
-* ✅ Student endpoints for raising and viewing complaints.
-* ✅ Proper use of dependency injection (`@Autowired`) and RESTful mappings (`@PostMapping`, `@GetMapping`).
+* 👨‍🎓 **Student Role**
+
+  * Register & login with `@srmist.edu.in` email
+  * Submit new complaints
+  * View submitted complaints with real-time status updates
+
+* 👨‍🏫 **Teacher Role**
+
+  * Login with assigned credentials
+  * View all complaints submitted by students
+  * Update complaint status (**In Progress, Resolved, Rejected**)
+  * Search complaints by ID, category, or keyword
+  * Filter complaints by category (Academics, Hostel, Canteen, etc.)
+
+* 🔒 **Authentication & Security**
+
+  * User registration with **encrypted passwords (BCrypt)**
+  * Role-based redirection after login
+  * Restricted endpoints for teacher/student
+  * Spring Security-based session handling
+
+* 🎨 **Frontend**
+
+  * Clean and responsive UI using **Tailwind CSS**
+  * Dynamic rendering of complaints with **JavaScript**
+  * Smooth animations, search, filter, and toast notifications
+  * Separate dashboards for Teacher and Student
 
 ---
 
+## 🛠️ Tech Stack
+
+**Backend:**
+
+* Java 17
+* Spring Boot 3+
+* Spring Security
+* Spring Data JPA
+* MySQL Database
+
+**Frontend:**
+
+* HTML5, CSS3
+* Tailwind CSS
+* JavaScript (Vanilla JS, Fetch API)
+
+**Tools:**
+
+* Maven
+* Postman (API Testing)
+* Git & GitHub
+* Eclipse
+
+---
+
+## ⚙️ Setup & Installation
+
+### 1️⃣ Clone Repository
+
+```bash
+git clone https://github.com/your-username/ComplaintManagementSystem.git
+cd ComplaintManagementSystem
+```
+
+### 2️⃣ Backend Setup
+
+* Open project in IntelliJ IDEA / VS Code
+* Configure `application.properties`:
+
+```properties
+spring.datasource.url=jdbc:mysql://localhost:3306/complaint
+spring.datasource.username=Username
+spring.datasource.password=yourpassword
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+
+# Security
+spring.security.user.roles=STUDENT,TEACHER
+```
+
+* Run Spring Boot application:
+
+```bash
+mvn spring-boot:run
+```
+
+### 3️⃣ Frontend Setup
+
+* Open `frontend/login.html` in a browser
+* Student login → `/Student.html`
+* Teacher login → `/Teacher.html`
+
+---
+
+## 🔐 Security Flow
+
+1. User registers with `@srmist.edu.in` email → Saved in DB (with role and encrypted password).
+2. On login → Spring Security authenticates credentials.
+3. Based on role:
+
+   * `ROLE_STUDENT` → Redirected to **Student Dashboard**
+   * `ROLE_TEACHER` → Redirected to **Teacher Dashboard**
+4. Teachers can update complaints via PUT API → `/Head/UpdateComplaint`.
+5. Students see real-time updated complaint status.
+
+---
+
+## 📸 Screenshots
+
+### 🔹 Login 
+<img width="2442" height="1147" alt="Screenshot 2025-09-19 222742" src="https://github.com/user-attachments/assets/78e5105e-20ad-4f46-801c-9b2b823c27e0" />
+
+### 🔹 Register
+
+<img width="2398" height="1150" alt="Screenshot 2025-09-19 222758" src="https://github.com/user-attachments/assets/0e4412ed-841d-4353-aadd-ce03dc9a0f22" />
 
 
+### 🔹 Student Dashboard
+
+<img width="2460" height="1155" alt="Screenshot 2025-09-19 222811" src="https://github.com/user-attachments/assets/3a13151f-6d7d-4b13-8370-580b453f5304" />
+
+<img width="2380" height="1141" alt="Screenshot 2025-09-19 222848" src="https://github.com/user-attachments/assets/8c19020e-b808-48a8-a677-f4bdef09ae4d" />
 
 
+### 🔹 Teacher Dashboard
 
+<img width="2351" height="1136" alt="Screenshot 2025-09-19 222826" src="https://github.com/user-attachments/assets/5a1f9de0-5e4c-4e9f-b065-dc8a42c1d075" />
+
+
+<img width="2283" height="1131" alt="Screenshot 2025-09-19 222927" src="https://github.com/user-attachments/assets/62097dad-e1b8-489d-b9e2-3465b288d154" />
+
+---
+
+## 📡 API Endpoints
+
+### Authentication
+
+| Method | Endpoint         | Description            |
+| ------ | ---------------- | ---------------------- |
+| POST   | `/auth/register` | Register new user      |
+| POST   | `/auth/login`    | Login and authenticate |
+
+### Student
+
+| Method | Endpoint                | Description      |
+| ------ | ----------------------- | ---------------- |
+| POST   | `/Student/AddComplaint` | Submit complaint |
+| GET    | `/Student/SeeComplaint` | View complaints  |
+
+### Teacher
+
+| Method | Endpoint                            | Description             |
+| ------ | ----------------------------------- | ----------------------- |
+| GET    | `/Head/SeeAllComplaints`            | View all complaints     |
+| PUT    | `/Head/UpdateComplaint?id=&status=` | Update complaint status |
+
+---
+
+## 📖 How It Works (Flow)
+
+1. User opens `login.html` → enters email & password
+2. Backend checks credentials with **AuthenticationRepository**
+3. If valid:
+
+   * Student → redirect `/Student.html`
+   * Teacher → redirect `/Teacher.html`
+4. Complaints are fetched from `/Student/SeeComplaint` API and displayed
+5. Teacher updates → API `/Head/UpdateComplaint` updates DB
+6. Student sees updated status on their dashboard
+
+---
+
+## 🚀 Future Enhancements
+
+* Email/SMS notifications for complaint updates
+* Admin dashboard for analytics
+* JWT authentication instead of session-based
+* File upload (screenshots, documents) with complaints
+
+---
+
+## 👩‍💻 Author
+
+**Srija A**
+🔗 [GitHub Profile](https://github.com/Srija-A-12)
+
+---
 
