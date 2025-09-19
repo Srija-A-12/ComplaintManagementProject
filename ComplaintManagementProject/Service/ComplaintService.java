@@ -59,18 +59,4 @@ public class ComplaintService {
 }
 
 
-//public Complaint updateStatus(int id, String newStatus) {
-//Complaint complaint=complaintRepo.findById(id)
-//		.orElseThrow(()-> new RuntimeException("Not found"));
-//complaint.setStatus(newStatus);
-//return complaintRepo.save(complaint);
-//
-//
-//}
-//public ComplaintUpdates updateComplaint(int complaintId,String complaintText,LocalDateTime updatedTime) {
-//ComplaintUpdates update = new ComplaintUpdates();
-//update.setComplaintId(complaintId);
-//update.setComplaintText(complaintText);
-//update.setUpdatedTime(LocalDateTime.now());        
-//return complaint_update_repo.save(update);
-//}
+
