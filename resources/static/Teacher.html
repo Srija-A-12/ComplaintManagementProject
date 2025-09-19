@@ -1,38 +1,316 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teacher Dashboard - Complaint System</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); }
-        .fab { transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); }
-        .fab:hover { transform: scale(1.1) rotate(10deg); box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22); }
-        .modal-backdrop { background-color: rgba(0, 0, 0, 0.6); }
-        .status-border-Resolved { border-left-color: #22c55e; } .status-border-InProgress { border-left-color: #f59e0b; } .status-border-Submitted { border-left-color: #3b82f6; } .status-border-Rejected { border-left-color: #ef4444; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Teacher Dashboard - Complaint System</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Custom Styles -->
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f8fafc;
+      background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    }
+    .fab {
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    .fab:hover {
+      transform: scale(1.1) rotate(10deg);
+      box-shadow: 0 14px 28px rgba(0,0,0,0.25), 
+                  0 10px 10px rgba(0,0,0,0.22);
+    }
+    .modal-backdrop {
+      background-color: rgba(0, 0, 0, 0.6);
+    }
+    /* Complaint Status Borders */
+    .status-border-Resolved   { border-left-color: #22c55e; }
+    .status-border-InProgress { border-left-color: #f59e0b; }
+    .status-border-Submitted  { border-left-color: #3b82f6; }
+    .status-border-Rejected   { border-left-color: #ef4444; }
+  </style>
 </head>
 <body class="antialiased text-gray-800">
 
-    <div class="container mx-auto p-4 sm:p-6 md:p-8 max-w-5xl">
-        <header class="mb-8"><div class="flex flex-wrap justify-between items-center gap-4"><div><h1 class="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-green-600">Teacher Dashboard</h1><p id="dashboard-subtitle" class="text-gray-600 mt-2 text-lg">Manage and update all student complaints.</p></div><div class="text-right"><p id="user-email" class="font-semibold text-gray-700"></p><a href="/logout" class="text-sm text-indigo-600 hover:text-indigo-800 font-medium">Logout</a></div></div></header>
-        <div class="mb-6"><input type="text" id="searchInput" placeholder="Search by ID, category, or keyword..." class="w-full p-4 pl-10 rounded-full border-gray-300 shadow-sm focus:ring-2 focus:ring-green-500"></div>
-        <div id="category-filters" class="flex flex-wrap items-center justify-center gap-2 mb-8"></div>
-        <div id="complaintsList" class="space-y-5"></div>
+  <!-- MAIN CONTAINER -->
+  <div class="container mx-auto p-4 sm:p-6 md:p-8 max-w-5xl">
+
+    <!-- HEADER -->
+    <header class="mb-8">
+      <div class="flex flex-wrap justify-between items-center gap-4">
+        <div>
+          <h1 class="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-green-600">
+            Teacher Dashboard
+          </h1>
+          <p id="dashboard-subtitle" class="text-gray-600 mt-2 text-lg">
+            Manage and update all student complaints.
+          </p>
+        </div>
+
+        <div class="text-right">
+          <p id="user-email" class="font-semibold text-gray-700"></p>
+          <a href="/logout" class="text-sm text-indigo-600 hover:text-indigo-800 font-medium">Logout</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- SEARCH BAR -->
+    <div class="mb-6">
+      <input 
+        type="text" 
+        id="searchInput" 
+        placeholder="Search by ID, category, or keyword..."
+        class="w-full p-4 pl-10 rounded-full border-gray-300 shadow-sm focus:ring-2 focus:ring-green-500"
+      />
     </div>
 
-    <button id="teacherFab" class="fab fixed bottom-8 right-8 w-16 h-16 bg-gradient-to-br from-teal-400 to-green-500 text-white rounded-2xl flex items-center justify-center shadow-xl focus:outline-none focus:ring-4 focus:ring-green-300" title="Update Complaint Status"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/></svg></button>
-    
-    <div id="teacherModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop hidden opacity-0 transition-opacity duration-300"><div class="bg-white w-full max-w-lg p-6 rounded-2xl shadow-2xl transition-transform transform scale-95 opacity-0 duration-300"><h2 class="text-2xl font-bold mb-1 text-gray-800">Update Complaint Status</h2><p class="text-gray-500 mb-6">Enter the Complaint ID and select the new status.</p><form id="teacherForm"><div class="space-y-5"><input type="number" id="updateComplaintId" placeholder="Complaint ID (e.g., 1)" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400" required><select id="updateStatus" class="w-full p-3 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-green-400" required><option value="" disabled selected>Select new status</option><option value="In Progress">In Progress</option><option value="Resolved">Resolved</option><option value="Rejected">Rejected</option></select></div><div class="mt-8 flex justify-end space-x-3"><button type="button" class="px-5 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 font-semibold transition" onclick="closeModal()">Cancel</button><button type="submit" class="px-5 py-2 bg-gradient-to-r from-teal-400 to-green-500 text-white rounded-lg hover:from-teal-500 hover:to-green-600 font-semibold shadow-md transition transform hover:scale-105">Update Status</button></div></form></div></div>
-    
-    <div id="toast" class="fixed top-8 right-8 bg-gray-900 text-white px-6 py-3 rounded-lg shadow-lg opacity-0 transform -translate-y-10 transition-all duration-500"><p id="toastMessage"></p></div>
-    
-    <script>
-        // Minified JS for brevity. Full logic is the same as previous versions.
-        let complaints=[],currentCategory="All";const complaintsList=document.getElementById("complaintsList"),searchInput=document.getElementById("searchInput"),categoryFilters=document.getElementById("category-filters"),teacherModal=document.getElementById("teacherModal"),teacherForm=document.getElementById("teacherForm"),statusTextStyles={Submitted:"bg-blue-100 text-blue-800","In Progress":"bg-amber-100 text-amber-800",Resolved:"bg-green-100 text-green-800",Rejected:"bg-red-100 text-red-800"},statusCategoryStyles={Infrastructure:"bg-gray-200 text-gray-800",Academics:"bg-purple-200 text-purple-800",Hostel:"bg-orange-200 text-orange-800",Canteen:"bg-pink-200 text-pink-800",Library:"bg-sky-200 text-sky-800",Other:"bg-stone-200 text-stone-800"},openModal=()=>{teacherModal.classList.remove("hidden");setTimeout(()=>{teacherModal.classList.remove("opacity-0");teacherModal.firstElementChild.classList.remove("scale-95","opacity-0")},10)},closeModal=()=>{teacherModal.classList.add("opacity-0");teacherModal.firstElementChild.classList.add("scale-95","opacity-0");setTimeout(()=>{teacherModal.classList.add("hidden")},300)},showToast=(e,t=!1)=>{const o=document.getElementById("toast"),s=document.getElementById("toastMessage");s.textContent=e;o.className=`fixed top-8 right-8 text-white px-6 py-3 rounded-lg shadow-lg transform transition-all duration-500 ${t?"bg-red-500":"bg-gray-900"}`;o.classList.remove("opacity-0","-translate-y-10");setTimeout(()=>{o.classList.add("opacity-0","-translate-y-10")},3e3)},renderCategories=()=>{categoryFilters.innerHTML="";["All",...Object.keys(statusCategoryStyles)].forEach(e=>{const t=document.createElement("button");t.textContent="All"===e?"All Complaints":e;t.dataset.category=e;const o="px-4 py-2 text-sm font-semibold rounded-full transition";t.className=e===currentCategory?`${o} bg-green-600 text-white shadow`:`${o} bg-white text-gray-700 hover:bg-green-100`;categoryFilters.appendChild(t)})},renderComplaints=()=>{const e=searchInput.value.toLowerCase();let t=complaints;"All"!==currentCategory&&(t=t.filter(e=>e.category===currentCategory));e&&(t=t.filter(t=>Object.values(t).some(t=>String(t).toLowerCase().includes(e))));complaintsList.innerHTML="";0===t.length?complaintsList.innerHTML='<div class="text-center p-12 bg-white rounded-xl shadow-md"><p class="text-gray-500 text-lg">No complaints found.</p></div>':t.sort((e,t)=>t.id-e.id).forEach(e=>{const t=statusTextStyles[e.status]||"",o=statusCategoryStyles[e.category]||"",s=new Date(e.submittedDate).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"});complaintsList.innerHTML+=`<div class="bg-white rounded-xl shadow-lg border-l-4 ${"status-border-"+e.status.replace(" ","")}"><div class="p-5"><div class="flex justify-between items-start mb-3"><h3 class="text-xl font-bold text-gray-800">${e.title}</h3><span class="text-sm font-semibold px-3 py-1 rounded-full ${t}">${e.status}</span></div><p class="text-gray-600 mb-4">${e.description}</p><div class="flex justify-between items-center text-sm text-gray-500 border-t pt-3 mt-4"><div class="flex items-center gap-3"><span class="font-mono bg-gray-100 px-2 py-1 rounded-md">ID: ${e.id}</span><span class="px-3 py-1 ${o} rounded-full text-xs font-bold">${e.category}</span></div><span>${s}</span></div></div></div>`})},loadComplaints=()=>fetch("/Student/SeeComplaint").then(e=>e.json()).then(e=>{complaints=e,renderComplaints()}).catch(e=>showToast("Failed to load complaints.",!0));teacherForm.addEventListener("submit",e=>{e.preventDefault();const t=new URLSearchParams({id:teacherForm.updateComplaintId.value,status:teacherForm.updateStatus.value});fetch(`/Head/UpdateComplaint?${t}`,{method:"PUT"}).then(e=>e.ok?e.json():Promise.reject()).then(()=>{showToast("Status updated successfully!");closeModal();teacherForm.reset();loadComplaints()}).catch(e=>showToast("Error updating status.",!0))});categoryFilters.addEventListener("click",e=>{e.target.dataset.category&&(currentCategory=e.target.dataset.category,renderCategories(),renderComplaints())});document.getElementById("teacherFab").addEventListener("click",openModal);searchInput.addEventListener("input",renderComplaints);document.addEventListener("DOMContentLoaded",()=>{fetch("/api/user/me").then(e=>e.json()).then(e=>document.getElementById("user-email").textContent=e.username);renderCategories();loadComplaints()});
-    </script>
+    <!-- CATEGORY FILTERS -->
+    <div id="category-filters" class="flex flex-wrap items-center justify-center gap-2 mb-8"></div>
+
+    <!-- COMPLAINTS LIST -->
+    <div id="complaintsList" class="space-y-5"></div>
+  </div>
+
+  <!-- FLOATING BUTTON -->
+  <button 
+    id="teacherFab"
+    class="fab fixed bottom-8 right-8 w-16 h-16 bg-gradient-to-br from-teal-400 to-green-500 text-white rounded-2xl flex items-center justify-center shadow-xl focus:outline-none focus:ring-4 focus:ring-green-300"
+    title="Update Complaint Status"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" 
+         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <rect width="8" height="4" x="8" y="2" rx="1" ry="1"/>
+      <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+      <path d="m9 14 2 2 4-4"/>
+    </svg>
+  </button>
+
+  <!-- UPDATE STATUS MODAL -->
+  <div id="teacherModal" 
+       class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop hidden opacity-0 transition-opacity duration-300">
+    <div class="bg-white w-full max-w-lg p-6 rounded-2xl shadow-2xl transition-transform transform scale-95 opacity-0 duration-300">
+      <h2 class="text-2xl font-bold mb-1 text-gray-800">Update Complaint Status</h2>
+      <p class="text-gray-500 mb-6">Enter the Complaint ID and select the new status.</p>
+
+      <!-- FORM -->
+      <form id="teacherForm">
+        <div class="space-y-5">
+          <input 
+            type="number" 
+            id="updateComplaintId" 
+            placeholder="Complaint ID (e.g., 1)" 
+            class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400"
+            required
+          />
+          <select 
+            id="updateStatus" 
+            class="w-full p-3 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-green-400"
+            required
+          >
+            <option value="" disabled selected>Select new status</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Resolved">Resolved</option>
+            <option value="Rejected">Rejected</option>
+          </select>
+        </div>
+
+        <!-- ACTION BUTTONS -->
+        <div class="mt-8 flex justify-end space-x-3">
+          <button type="button" onclick="closeModal()" 
+                  class="px-5 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 font-semibold transition">
+            Cancel
+          </button>
+          <button type="submit" 
+                  class="px-5 py-2 bg-gradient-to-r from-teal-400 to-green-500 text-white rounded-lg hover:from-teal-500 hover:to-green-600 font-semibold shadow-md transition transform hover:scale-105">
+            Update Status
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- TOAST MESSAGE -->
+  <div id="toast" 
+       class="fixed top-8 right-8 bg-gray-900 text-white px-6 py-3 rounded-lg shadow-lg opacity-0 transform -translate-y-10 transition-all duration-500">
+    <p id="toastMessage"></p>
+  </div>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    let complaints = [];
+    let currentCategory = "All";
+
+    const complaintsList = document.getElementById("complaintsList");
+    const searchInput = document.getElementById("searchInput");
+    const categoryFilters = document.getElementById("category-filters");
+    const teacherModal = document.getElementById("teacherModal");
+    const teacherForm = document.getElementById("teacherForm");
+
+    const statusTextStyles = {
+      Submitted: "bg-blue-100 text-blue-800",
+      "In Progress": "bg-amber-100 text-amber-800",
+      Resolved: "bg-green-100 text-green-800",
+      Rejected: "bg-red-100 text-red-800",
+    };
+
+    const statusCategoryStyles = {
+      Infrastructure: "bg-gray-200 text-gray-800",
+      Academics: "bg-purple-200 text-purple-800",
+      Hostel: "bg-orange-200 text-orange-800",
+      Canteen: "bg-pink-200 text-pink-800",
+      Library: "bg-sky-200 text-sky-800",
+      Other: "bg-stone-200 text-stone-800",
+    };
+
+    // Modal Controls
+    const openModal = () => {
+      teacherModal.classList.remove("hidden");
+      setTimeout(() => {
+        teacherModal.classList.remove("opacity-0");
+        teacherModal.firstElementChild.classList.remove("scale-95", "opacity-0");
+      }, 10);
+    };
+
+    const closeModal = () => {
+      teacherModal.classList.add("opacity-0");
+      teacherModal.firstElementChild.classList.add("scale-95", "opacity-0");
+      setTimeout(() => teacherModal.classList.add("hidden"), 300);
+    };
+
+    // Toast Notification
+    const showToast = (message, isError = false) => {
+      const toast = document.getElementById("toast");
+      const toastMessage = document.getElementById("toastMessage");
+      toastMessage.textContent = message;
+      toast.className = `fixed top-8 right-8 text-white px-6 py-3 rounded-lg shadow-lg transform transition-all duration-500 ${isError ? "bg-red-500" : "bg-gray-900"}`;
+      toast.classList.remove("opacity-0", "-translate-y-10");
+      setTimeout(() => toast.classList.add("opacity-0", "-translate-y-10"), 3000);
+    };
+
+    // Category Buttons
+    const renderCategories = () => {
+      categoryFilters.innerHTML = "";
+      ["All", ...Object.keys(statusCategoryStyles)].forEach(category => {
+        const button = document.createElement("button");
+        button.textContent = category === "All" ? "All Complaints" : category;
+        button.dataset.category = category;
+        const baseClass = "px-4 py-2 text-sm font-semibold rounded-full transition";
+        button.className = category === currentCategory
+          ? `${baseClass} bg-green-600 text-white shadow`
+          : `${baseClass} bg-white text-gray-700 hover:bg-green-100`;
+        categoryFilters.appendChild(button);
+      });
+    };
+
+    // Render Complaints
+    const renderComplaints = () => {
+      const searchTerm = searchInput.value.toLowerCase();
+      let filtered = complaints;
+
+      if (currentCategory !== "All") {
+        filtered = filtered.filter(c => c.category === currentCategory);
+      }
+
+      if (searchTerm) {
+        filtered = filtered.filter(c =>
+          Object.values(c).some(v => String(v).toLowerCase().includes(searchTerm))
+        );
+      }
+
+      complaintsList.innerHTML = "";
+
+      if (filtered.length === 0) {
+        complaintsList.innerHTML = `
+          <div class="text-center p-12 bg-white rounded-xl shadow-md">
+            <p class="text-gray-500 text-lg">No complaints found.</p>
+          </div>`;
+        return;
+      }
+
+      filtered
+        .sort((a, b) => b.id - a.id)
+        .forEach(c => {
+          const statusClass = statusTextStyles[c.status] || "";
+          const categoryClass = statusCategoryStyles[c.category] || "";
+          const date = new Date(c.submittedDate).toLocaleDateString("en-GB", {
+            day: "numeric", month: "short", year: "numeric"
+          });
+
+          complaintsList.innerHTML += `
+            <div class="bg-white rounded-xl shadow-lg border-l-4 status-border-${c.status.replace(" ", "")}">
+              <div class="p-5">
+                <div class="flex justify-between items-start mb-3">
+                  <h3 class="text-xl font-bold text-gray-800">${c.title}</h3>
+                  <span class="text-sm font-semibold px-3 py-1 rounded-full ${statusClass}">${c.status}</span>
+                </div>
+                <p class="text-gray-600 mb-4">${c.description}</p>
+                <div class="flex justify-between items-center text-sm text-gray-500 border-t pt-3 mt-4">
+                  <div class="flex items-center gap-3">
+                    <span class="font-mono bg-gray-100 px-2 py-1 rounded-md">ID: ${c.id}</span>
+                    <span class="px-3 py-1 ${categoryClass} rounded-full text-xs font-bold">${c.category}</span>
+                  </div>
+                  <span>${date}</span>
+                </div>
+              </div>
+            </div>`;
+        });
+    };
+
+    // Load Complaints
+    const loadComplaints = () => {
+      fetch("/Student/SeeComplaint")
+        .then(res => res.json())
+        .then(data => { complaints = data; renderComplaints(); })
+        .catch(() => showToast("Failed to load complaints.", true));
+    };
+
+    // Form Submit
+    teacherForm.addEventListener("submit", e => {
+      e.preventDefault();
+      const params = new URLSearchParams({
+        id: teacherForm.updateComplaintId.value,
+        status: teacherForm.updateStatus.value
+      });
+
+      fetch(`/Head/UpdateComplaint?${params}`, { method: "PUT" })
+        .then(res => res.ok ? res.json() : Promise.reject())
+        .then(() => {
+          showToast("Status updated successfully!");
+          closeModal();
+          teacherForm.reset();
+          loadComplaints();
+        })
+        .catch(() => showToast("Error updating status.", true));
+    });
+
+    // Category Filter Click
+    categoryFilters.addEventListener("click", e => {
+      if (e.target.dataset.category) {
+        currentCategory = e.target.dataset.category;
+        renderCategories();
+        renderComplaints();
+      }
+    });
+
+    // Event Listeners
+    document.getElementById("teacherFab").addEventListener("click", openModal);
+    searchInput.addEventListener("input", renderComplaints);
+
+    // On Page Load
+    document.addEventListener("DOMContentLoaded", () => {
+      fetch("/api/user/me")
+        .then(res => res.json())
+        .then(user => document.getElementById("user-email").textContent = user.username);
+
+      renderCategories();
+      loadComplaints();
+    });
+  </script>
 </body>
 </html>
-
