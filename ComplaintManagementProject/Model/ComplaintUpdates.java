@@ -10,13 +10,6 @@ import jakarta.persistence.Id;
 
 @Entity
 public class ComplaintUpdates {
-	
-//	@Id
-//	@GeneratedValue(strategy = GenerationType.IDENTITY)
-//	private int id;
-//	private int  complaintId; // should be complaint_id of student compalint 
-//	private String complaintText;
-//	private LocalDateTime updatedTime;
 	    @Id
 	    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	    private int id;
@@ -70,3 +63,4 @@ public class ComplaintUpdates {
 	
 	
 }
+
