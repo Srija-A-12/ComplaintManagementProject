@@ -4,12 +4,6 @@ A **role-based Complaint Management System** built using **Spring Boot, Spring S
 It allows **students** to submit complaints and **teachers (HOD/MAM)** to manage and update their status.
 
 ---
-
-Perfect 👌 let’s add some **emojis** to make your GitHub README more engaging while still professional.
-Here’s your **Backend + Database only role** section with emojis included:
-
----
-
 ## 👩‍💻 My Role & Contributions
 
 I was responsible for the **Backend and Database Development** of this project.
